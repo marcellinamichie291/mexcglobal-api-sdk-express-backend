@@ -1,0 +1,1033 @@
+{
+  "author": {
+    "email": "suggest@mexc.com",
+    "name": "MEXC",
+    "roles": [
+      "author"
+    ]
+  },
+  "bundled": {
+    "@types/node": "^16.11.10",
+    "sync-request": "6.1.0"
+  },
+  "description": "mexc sdk",
+  "docs": {
+    "stability": "stable"
+  },
+  "homepage": "https://github.com/mxcdevelop/mexc-api-sdk#readme",
+  "jsiiVersion": "1.44.1",
+  "keywords": [],
+  "license": "ISC",
+  "metadata": {
+    "jsii": {
+      "pacmak": {
+        "hasDefaultInterfaces": true
+      }
+    }
+  },
+  "name": "mexc-sdk",
+  "readme": {
+    "markdown": "# mexc-api-sdk\n\n MEXC Official Market and trade api sdk, easy to connection and send request to MEXC open api !\n## Table of APIS\n  - [Init](#init)\n  - [Market](#market)\n    - [Ping](#ping)\n    - [Check Server Time](#check-server-time)\n    - [Exchange Information](#exchange-information)\n    - [Recent Trades List](#recent-trades-list)\n    - [Order Book](#order-book)\n    - [Old Trade Lookup](#old-trade-lookup)\n    - [Aggregate Trades List](#aggregate-trades-list)\n    - [kline Data](#kline-data)\n    - [Current Average Price](#current-average-price)\n    - [24hr Ticker Price Change Statistics](#24hr-ticker-price-change-statistics)\n    - [Symbol Price Ticker](#symbol-price-ticker)\n    - [Symbol Order Book Ticker](#symbol-order-book-ticker)\n  - [Trade](#trade)\n    - [Test New Order](#test-new-order)\n    - [New Order](#new-order)\n    - [cancel-order](#cancel-order)\n    - [Cancel all Open Orders on a Symbol](#cancel-all-open-orders-on-a-symbol)\n    - [Query Order](#query-order)\n    - [Current Open Orders](#current-open-orders)\n    - [All Orders](#all-orders)\n    - [Account Information](#account-information)\n    - [Account Trade List](#account-trade-list)\n## Init\n```javascript\n//Javascript\nimport * as Mexc from 'mexc-sdk';\nconst apiKey = 'apiKey'\nconst apiSecret = 'apiSecret'\nconst client = new Mexc.Spot(apiKey, apiSecret);\n```\n```go\n// Go\npackage main\nimport (\n\t\"fmt\"\n\t\"mexc-sdk/mexcsdk\"\n)\n\nfunc main() {\n\tapiKey := \"apiKey\"\n\tapiSecret := \"apiSecret\"\n\tspot := mexcsdk.NewSpot(apiKey, apiSecret)\n}\n```\n```python\n# python\nfrom mexc_sdk import Spot\nspot = Spot(api_key='apiKey', apiSecret='apiSecret')\n```\n```java\n// java\nimport Mexc.Sdk.*;\nclass MyClass {\n  public static void main(String[] args) {\n    String apiKey= \"apiKey\";\n    String apiSecret= \"apiSecret\";\n    Spot mySpot = new Spot(apiKey, apiSecret);\n  }\n}\n```\n```C#\n// dotnet\nusing System;\nusing System.Collections.Generic;\nusing Mxc.Sdk;\n\nnamespace dotnet\n{\n    class Program\n    {\n        static void Main(string[] args)\n        {\n            string  apiKey = \"apiKey\";\n            string  apiSecret= \"apiSecret\";\n            var spot = new Spot(apiKey, apiSecret);\n        }\n    }\n}\n\n```\n\n## Market\n### Ping\n```javascript\nclient.ping()\n```\n### Check Server Time\n```javascript\nclient.time()\n```\n### Exchange Information\n```javascript\nclient.exchangeInfo(options: any)\noptions:{symbol, symbols}\n/**\n * choose one parameter\n *\n * symbol :\n *      example \"BNBBTC\";\n *\n * symbols :\n *      array of symbol\n *      example [\"BTCUSDT\",\"BNBBTC\"];\n *\n */\n```\n\n### Recent Trades List\n```javascript\nclient.trades(symbol: string, options: any = { limit: 500 })\noptions:{limit}\n/**\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n */\n```\n### Order Book\n```javascript\nclient.depth(symbol: string, options: any = { limit: 100 })\noptions:{limit}\n/**\n * limit :\n *      Number of returned data\n *      Default 100;\n *      max 5000;\n *      Valid:[5, 10, 20, 50, 100, 500, 1000, 5000]\n *\n */\n```\n\n### Old Trade Lookup\n```javascript\nclient.historicalTrades(symbol: string, options: any = { limit: 500 })\noptions:{limit, fromId}\n/**\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n * fromId:\n *      Trade id to fetch from. Default gets most recent trades\n *\n */\n\n```\n\n### Aggregate Trades List\n```javascript\nclient.aggTrades(symbol: string, options: any = { limit: 500 })\noptions:{fromId, startTime, endTime, limit}\n/**\n *\n * fromId :\n *      id to get aggregate trades from INCLUSIVE\n *\n * startTime:\n *      start at\n *\n * endTime:\n *      end at\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n */\n```\n### kline Data\n```javascript\nclient.klines(symbol: string, interval: string, options: any = { limit: 500 })\noptions:{ startTime, endTime, limit}\n/**\n *\n * interval :\n *      m :minute;\n *      h :Hour;\n *      d :day;\n *      w :week;\n *      M :month\n *      example : \"1m\"\n *\n * startTime :\n *      start at\n *\n * endTime :\n *      end at\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n */\n```\n\n### Current Average Price\n```javascript\nclient.avgPrice(symbol: string)\n```\n### 24hr Ticker Price Change Statistics\n```javascript\nclient.ticker24hr(symbol?: string)\n```\n### Symbol Price Ticker\n```javascript\nclient.tickerPrice(symbol?: string)\n```\n\n### Symbol Order Book Ticker\n```javascript\nclient.bookTicker(symbol?: string)\n```\n## Trade\n### Test New Order\n```javascript\nclient.newOrderTest(symbol: string, side: string, orderType: string, options: any = {})\noptions:{ timeInForce, quantity, quoteOrderQty, price, newClientOrderId, stopPrice, icebergQty, newOrderRespType, recvWindow}\n/**\n *\n * side:\n *      Order side\n *      ENUM:\n *        BUY\n *        SELL\n *\n * orderType:\n *      Order type\n *      ENUM:\n *        LIMIT\n *        MARKET\n *        STOP_LOSS\n *        STOP_LOSS_LIMIT\n *        TAKE_PROFIT\n *        TAKE_PROFIT_LIMIT\n *        LIMIT_MAKER\n *\n * timeInForce :\n *      How long an order will be active before expiration.\n *      GTC: Active unless the order is canceled\n *      IOC: Order will try to fill the order as much as it can before the order expires\n *      FOK: Active unless the full order cannot be filled upon execution.\n *\n * quantity :\n *      target quantity\n *\n * quoteOrderQty :\n *      Specify the total spent or received\n *\n * price :\n *      target price\n *\n * newClientOrderId :\n *      A unique id among open orders. Automatically generated if not sent\n *\n * stopPrice :\n *      sed with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders\n *\n * icebergQty :\n *      Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order\n *\n * newOrderRespType :\n *      Set the response JSON. ACK, RESULT, or FULL;\n *      MARKET and LIMIT order types default to FULL, all other orders default to ACK\n *\n * recvWindow :\n *      Delay accept time\n *      The value cannot be greater than 60000\n *      defaults: 5000\n *\n */\n\n```\n\n### New Order\n```javascript\nclient.newOrder(symbol: string, side: string, orderType: string, options: any = {})\noptions:{ timeInForce, quantity, quoteOrderQty, price, newClientOrderId, stopPrice, icebergQty, newOrderRespType, recvWindow}\n/**\n *\n * side:\n *      Order side\n *      ENUM:\n *        BUY\n *        SELL\n *\n * orderType:\n *      Order type\n *      ENUM:\n *        LIMIT\n *        MARKET\n *        STOP_LOSS\n *        STOP_LOSS_LIMIT\n *        TAKE_PROFIT\n *        TAKE_PROFIT_LIMIT\n *        LIMIT_MAKER\n *\n * timeInForce :\n *      How long an order will be active before expiration.\n *      GTC: Active unless the order is canceled\n *      IOC: Order will try to fill the order as much as it can before the order expires\n *      FOK: Active unless the full order cannot be filled upon execution.\n *\n * quantity :\n *      target quantity\n *\n * quoteOrderQty :\n *      Specify the total spent or received\n *\n * price :\n *      target price\n *\n * newClientOrderId :\n *      A unique id among open orders. Automatically generated if not sent\n *\n * stopPrice :\n *      sed with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders\n *\n * icebergQty :\n *      Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order\n *\n * newOrderRespType :\n *      Set the response JSON. ACK, RESULT, or FULL;\n *      MARKET and LIMIT order types default to FULL, all other orders default to ACK\n *\n * recvWindow :\n *      Delay accept time\n *      The value cannot be greater than 60000\n *      defaults: 5000\n *\n */\n\n```\n\n### cancel-order\n```javascript\nclient.cancelOrder(symbol: string, options:any = {})\noptions:{ orderId, origClientOrderId, newClientOrderId}\n/**\n *\n * Either orderId or origClientOrderId must be sent\n *\n * orderId:\n *      target orderId\n *\n * origClientOrderId:\n *      target origClientOrderId\n *\n * newClientOrderId:\n *      Used to uniquely identify this cancel. Automatically generated by default.\n *\n */\n\n```\n\n### Cancel all Open Orders on a Symbol\n```javascript\nclient.cancelOpenOrders(symbol: string)\n```\n### Query Order\n```javascript\nclient.queryOrder(symbol: string, options:any = {})\noptions:{ orderId, origClientOrderId}\n/**\n *\n * Either orderId or origClientOrderId must be sent\n *\n * orderId:\n *      target orderId\n *\n * origClientOrderId:\n *      target origClientOrderId\n *\n */\n```\n### Current Open Orders\n```javascript\nclient.openOrders(symbol: string)\n```\n### All Orders\n```javascript\nclient.allOrders(symbol: string, options: any = { limit: 500 })\noptions:{ orderId, startTime, endTime, limit}\n\n/**\n *\n * orderId:\n *      target orderId\n *\n * startTime:\n *      start at\n *\n * endTime:\n *      end at\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n */\n```\n### Account Information\n```javascript\nclient.accountInfo()\n```\n### Account Trade List\n```javascript\nclient.accountTradeList(symbol: string, options:any = { limit: 500 })\noptions:{ orderId, startTime, endTime, fromId, limit}\n\n/**\n *\n * orderId:\n *      target orderId\n *\n * startTime:\n *      start at\n *\n * endTime:\n *      end at\n *\n * fromId:\n *      TradeId to fetch from. Default gets most recent trades\n *\n * limit :\n *      Number of returned data\n *      Default 500;\n *      max 1000;\n *\n */\n```\n"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mxcdevelop/mexc-api-sdk.git"
+  },
+  "schema": "jsii/0.10.0",
+  "targets": {
+    "dotnet": {
+      "namespace": "Mexc.Sdk",
+      "packageId": "Mexc.Sdk"
+    },
+    "go": {
+      "moduleName": "mexc-sdk"
+    },
+    "java": {
+      "maven": {
+        "artifactId": "Core",
+        "groupId": "Mexc"
+      },
+      "package": "Mexc.Sdk"
+    },
+    "js": {
+      "npm": "mexc-sdk"
+    },
+    "python": {
+      "distName": "mexc-sdk",
+      "module": "mexc_sdk"
+    }
+  },
+  "types": {
+    "mexc-sdk.Base": {
+      "assembly": "mexc-sdk",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.Base",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/base.ts",
+          "line": 6
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/base.ts",
+        "line": 4
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/modules/base.ts",
+            "line": 12
+          },
+          "name": "publicRequest",
+          "parameters": [
+            {
+              "name": "method",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "path",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "paramsObj",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/modules/base.ts",
+            "line": 30
+          },
+          "name": "signRequest",
+          "parameters": [
+            {
+              "name": "method",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "path",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "paramsObj",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        }
+      ],
+      "name": "Base",
+      "properties": [
+        {
+          "docs": {
+            "stability": "stable"
+          },
+          "locationInModule": {
+            "filename": "src/modules/base.ts",
+            "line": 5
+          },
+          "name": "config",
+          "type": {
+            "primitive": "any"
+          }
+        }
+      ],
+      "symbolId": "src/modules/base:Base"
+    },
+    "mexc-sdk.Common": {
+      "assembly": "mexc-sdk",
+      "base": "mexc-sdk.Market",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.Common",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/base.ts",
+          "line": 6
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/common.ts",
+        "line": 3
+      },
+      "methods": [
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Test Connectivity."
+          },
+          "locationInModule": {
+            "filename": "src/modules/common.ts",
+            "line": 7
+          },
+          "name": "ping",
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Check Server Time."
+          },
+          "locationInModule": {
+            "filename": "src/modules/common.ts",
+            "line": 15
+          },
+          "name": "time",
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        }
+      ],
+      "name": "Common",
+      "symbolId": "src/modules/common:Common"
+    },
+    "mexc-sdk.Market": {
+      "assembly": "mexc-sdk",
+      "base": "mexc-sdk.Base",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.Market",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/base.ts",
+          "line": 6
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/market.ts",
+        "line": 4
+      },
+      "methods": [
+        {
+          "docs": {
+            "remarks": "Note: If sending startTime and endTime, the interval must be less than one hour",
+            "returns": "",
+            "stability": "stable",
+            "summary": "Compressed/Aggregate Trades List."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 119
+          },
+          "name": "aggTrades",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.fromId] - id to get aggregate trades from INCLUSIVE. [options.startTime] - Timestamp in ms to get aggregate trades from INCLUSIVE. [options.endTime] - Timestamp in ms to get aggregate trades until INCLUSIVE. [options.limit] - Default 500; max 1000. ex:500 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Current Average Price."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 167
+          },
+          "name": "avgPrice",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Symbol Order Book Ticker."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 213
+          },
+          "name": "bookTicker",
+          "parameters": [
+            {
+              "name": "symbol",
+              "optional": true,
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Order Book."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 40
+          },
+          "name": "depth",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.limit] - Default 100; max 5000. Valid limits:[5, 10, 20, 50, 100, 500, 1000, 5000]. ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Exchange Information."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 15
+          },
+          "name": "exchangeInfo",
+          "parameters": [
+            {
+              "docs": {
+                "summary": "``` [options.symbol] - symbol(optional) ex: BTCUSDT. [options.symbols] - for mutiple symbols, add comma for each symbol in string. ex: BTCUSDT,BNBBTC . ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Old Trade Lookup."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 90
+          },
+          "name": "historicalTrades",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.limit] -limit(optional) Default 500; max 1000. ex:500. ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Kline/Candlestick Data."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 147
+          },
+          "name": "klines",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "interval",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.startTime] [options.endTime] [options.limit] -Default 500; max 1000. ex: 500 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "24hr Ticker Price Change Statistics."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 180
+          },
+          "name": "ticker24hr",
+          "parameters": [
+            {
+              "name": "symbol",
+              "optional": true,
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "stability": "stable",
+            "summary": "Symbol Price Ticker."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 197
+          },
+          "name": "tickerPrice",
+          "parameters": [
+            {
+              "name": "symbol",
+              "optional": true,
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Recent Trades List."
+          },
+          "locationInModule": {
+            "filename": "src/modules/market.ts",
+            "line": 65
+          },
+          "name": "trades",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.limit] -limit(optional) Default 500; max 1000. ex: 500. ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        }
+      ],
+      "name": "Market",
+      "symbolId": "src/modules/market:Market"
+    },
+    "mexc-sdk.Spot": {
+      "assembly": "mexc-sdk",
+      "base": "mexc-sdk.Trade",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.Spot",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/spot.ts",
+          "line": 4
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "optional": true,
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "optional": true,
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/spot.ts",
+        "line": 3
+      },
+      "name": "Spot",
+      "symbolId": "src/modules/spot:Spot"
+    },
+    "mexc-sdk.Trade": {
+      "assembly": "mexc-sdk",
+      "base": "mexc-sdk.UserData",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.Trade",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/base.ts",
+          "line": 6
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/trade.ts",
+        "line": 4
+      },
+      "methods": [
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "All Orders."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 175
+          },
+          "name": "allOrders",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.orderId] - If startTime and endTime are set, orderId does not need to be set [options.startTime] [options.endTime] [options.limit] - value between 1 and 1000, default is 500 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Cancel all Open Orders on a Symbol."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 117
+          },
+          "name": "cancelOpenOrders",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Cancel Order."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 101
+          },
+          "name": "cancelOrder",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.orderId] [options.origClientOrderId] [options.newClientOrderId] ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "New Order."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 68
+          },
+          "name": "newOrder",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "side",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "orderType",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.timeInForce] [options.quantity] [options.quoteOrderQty] [options.price] [options.newClientOrderId] - A unique id among open orders. Automatically generated if not sent. [options.stopPrice] - Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders. [options.icebergQty] - Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order. [options.newOrderRespType] - Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types default to FULL, all other orders default to ACK. [options.recvWindow] - The value cannot be greater than 60000 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Test New Order."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 26
+          },
+          "name": "newOrderTest",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "side",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "name": "orderType",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.timeInForce] [options.quantity] [options.quoteOrderQty] [options.price] [options.newClientOrderId] - A unique id among open orders. Automatically generated if not sent. [options.stopPrice] - Used with STOP_LOSS, STOP_LOSS_LIMIT, TAKE_PROFIT, and TAKE_PROFIT_LIMIT orders. [options.icebergQty] - Used with LIMIT, STOP_LOSS_LIMIT, and TAKE_PROFIT_LIMIT to create an iceberg order. [options.newOrderRespType] - Set the response JSON. ACK, RESULT, or FULL; MARKET and LIMIT order types default to FULL, all other orders default to ACK. [options.recvWindow] - The value cannot be greater than 60000 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Current Open Orders."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 154
+          },
+          "name": "openOrders",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Query Order."
+          },
+          "locationInModule": {
+            "filename": "src/modules/trade.ts",
+            "line": 138
+          },
+          "name": "queryOrder",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.orderId] - At least one of orderId and origClientOrderId needs to be sent [options.origClientOrderId] ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        }
+      ],
+      "name": "Trade",
+      "symbolId": "src/modules/trade:Trade"
+    },
+    "mexc-sdk.UserData": {
+      "assembly": "mexc-sdk",
+      "base": "mexc-sdk.Common",
+      "docs": {
+        "stability": "stable"
+      },
+      "fqn": "mexc-sdk.UserData",
+      "initializer": {
+        "docs": {
+          "stability": "stable"
+        },
+        "locationInModule": {
+          "filename": "src/modules/base.ts",
+          "line": 6
+        },
+        "parameters": [
+          {
+            "name": "apiKey",
+            "type": {
+              "primitive": "string"
+            }
+          },
+          {
+            "name": "apiSecret",
+            "type": {
+              "primitive": "string"
+            }
+          }
+        ]
+      },
+      "kind": "class",
+      "locationInModule": {
+        "filename": "src/modules/userData.ts",
+        "line": 4
+      },
+      "methods": [
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Account Information."
+          },
+          "locationInModule": {
+            "filename": "src/modules/userData.ts",
+            "line": 10
+          },
+          "name": "accountInfo",
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        },
+        {
+          "docs": {
+            "returns": "",
+            "stability": "stable",
+            "summary": "Account Trade List."
+          },
+          "locationInModule": {
+            "filename": "src/modules/userData.ts",
+            "line": 33
+          },
+          "name": "accountTradeList",
+          "parameters": [
+            {
+              "name": "symbol",
+              "type": {
+                "primitive": "string"
+              }
+            },
+            {
+              "docs": {
+                "summary": "``` [options.orderId] - This can only be used in combination with symbol. [options.startTime] [options.endTime] [options.fromId] - TradeId to fetch from. Default gets most recent trades. [options.limit] - default: 500, Max: 1000 ```."
+              },
+              "name": "options",
+              "optional": true,
+              "type": {
+                "primitive": "any"
+              }
+            }
+          ],
+          "returns": {
+            "type": {
+              "primitive": "any"
+            }
+          }
+        }
+      ],
+      "name": "UserData",
+      "symbolId": "src/modules/userData:UserData"
+    }
+  },
+  "version": "1.0.0",
+  "fingerprint": "t6kGC+inMT9QBF9ebESWD8cCzCxlXfmAWNAlRUYVRso="
+}
