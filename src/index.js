@@ -18,8 +18,3 @@ app.get("/all-tokens", cors(), (req, res, next) => {
 app.listen(8000, () => {
   console.log("...listening");
 });
-
-//TODO: create an endpoint that starts evaluating all the coins in the marketplace to look for newly added coins (this in front-end side)
-//TODO: check for duplicated files in the project within node_modules, etc... prepare the project to be uploaded to github
-//TODO: check for the price variation of tokens within the last decided time interval and calculate if it is more than a certain percetatge during a certain number of iterations,
-// i.e. the price is going up more than 5% during 5 consecutives periods of 5min so to total has gone up more than 25%
